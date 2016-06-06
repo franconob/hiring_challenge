@@ -23,7 +23,6 @@ $chatResponse = new ChatResponse($request);
  */
 $allowedDomains = explode(',', getenv('ALLOWED_DOMAINS'));
 $allowBlankReferrer = getenv('ALLOW_BLANK_REFERRER') || false;
-$httpOrigin = !empty($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : null;
 
 if (!$controller->checkCORS($allowedDomains, $allowBlankReferrer)) {
     return $chatResponse->send(new NotAllowedResponse('Not a valid origin.'));
