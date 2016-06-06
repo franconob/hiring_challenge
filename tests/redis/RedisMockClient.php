@@ -23,14 +23,4 @@ class RedisMockClient extends RedisMock
         $val = parent::get($key);
         return unserialize($val);
     }
-
-    public function mget($fields)
-    {
-        $data = [];
-        foreach ($fields as $field) {
-            $data[] = $this->get($field);
-        }
-
-        return $data;
-    }
 }
