@@ -4,14 +4,16 @@
   "license": "proprietary",
   "autoload": {
     "psr-4": {
-      "app\\": "src/"
+      "app\\": "src/",
+      "tests\\": "tests/"
     }
   },
   "require": {
     "ext-redis": "*",
     "vlucas/phpdotenv": "2.2.0",
     "phpunit/phpunit": "*",
-    "symfony/http-foundation": "^3.1"
+    "symfony/http-foundation": "^3.1",
+    "m6web/redis-mock": "^2.6"
   },
   "scripts": {
     "test": "vendor/bin/phpunit --bootstrap vendor/autoload.php -v src/tests"

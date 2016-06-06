@@ -14,6 +14,15 @@ use phpunit\framework\TestCase;
 
 class RedisConnectionTest extends TestCase
 {
+    private $redisCli = null;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->redisCli = $this->createMock('app\domain\redis\RedisCli');
+    }
+
     /**
      */
     public function testRedisConnectionOk()

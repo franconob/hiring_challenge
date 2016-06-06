@@ -9,14 +9,24 @@
 namespace app\tests;
 
 use app\domain\chat\ChatController;
-use app\domain\redis\RedisCli;
 use app\domain\response\NotFoundResponse;
 use phpunit\framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use tests\redis\RedisMockClient;
 
+require __DIR__ . '/redis/createMockData.php';
 
 class ChatControllerTest extends TestCase
 {
+    private $redisCli = null;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->redisCli = new RedisMockClient();
+        \app\tests\redis\createMockData($this->redisCli);
+    }
+
     /**
      * @covers app\domain\chat\ChatController::checkCORS
      */
@@ -83,11 +93,9 @@ class ChatControllerTest extends TestCase
 
         $request->cookies->add(['app' => 'hash']);
 
-        $cli = RedisCli::getClient('localhost', 6379);
-
         $cookieSession = $chatController->checkCookie('app');
 
-        $resp = $chatController->getFriendsList($cookieSession, $cli);
+        $resp = $chatController->getFriendsList($cookieSession, $this->redisCli);
         $userList = $resp->getContent();
 
         $this->assertEquals(true, !empty(json_decode($userList)));
@@ -103,11 +111,9 @@ class ChatControllerTest extends TestCase
 
         $request->cookies->add(['app' => 'hash']);
 
-        $cli = RedisCli::getClient('localhost', 6379);
-
         $cookieSession = $chatController->checkCookie('app');
 
-        $resp = $chatController->getFriendsList($cookieSession, $cli);
+        $resp = $chatController->getFriendsList($cookieSession, $this->redisCli);
         $userList = $resp->getContent();
 
         $this->assertEquals(true, empty(json_decode($userList)));
@@ -122,11 +128,9 @@ class ChatControllerTest extends TestCase
 
         $request->cookies->add(['app' => 'wrong cookie value']);
 
-        $cli = RedisCli::getClient('localhost', 6379);
-
         $cookieSession = $chatController->checkCookie('app');
 
-        $resp = $chatController->getFriendsList($cookieSession, $cli);
+        $resp = $chatController->getFriendsList($cookieSession, $this->redisCli);
 
         $this->assertInstanceOf(NotFoundResponse::class, $resp);
     }

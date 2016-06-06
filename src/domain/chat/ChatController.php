@@ -68,7 +68,7 @@ class ChatController
      * @param Redis $redis
      * @return NotFoundResponse|SuccessResponse
      */
-    public function getFriendsList($cookieName, Redis $redis)
+    public function getFriendsList($cookieName, $redis)
     {
         $session = $redis->get(join(':', ['PHPREDIS_SESSION', $cookieName]));
 
